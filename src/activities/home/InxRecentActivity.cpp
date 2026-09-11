@@ -372,9 +372,17 @@ int InxRecentActivity::indexFromPoint(const int x, const int y) const {
 void InxRecentActivity::loop() {
   if (!books || books->empty()) return;
 
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
-    openSelected();
-    return;
+  // INX theme: use power button for confirm instead of Confirm button
+  if (SETTINGS.uiTheme == CrossPointSettings::INX) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Power)) {
+      openSelected();
+      return;
+    }
+  } else {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+      openSelected();
+      return;
+    }
   }
 
   int x = 0;
@@ -398,17 +406,35 @@ void InxRecentActivity::loop() {
 
   const int count = static_cast<int>(books->size());
   const auto swipe = mappedInput.wasSwipe();
-  if (mappedInput.wasReleased(MappedInputManager::Button::NavNext) || swipe == MappedInputManager::SwipeDir::Up ||
-      swipe == MappedInputManager::SwipeDir::Left) {
-    selected = (selected + 1) % count;
-    requestUpdate();
-    return;
-  }
-  if (mappedInput.wasReleased(MappedInputManager::Button::NavPrevious) || swipe == MappedInputManager::SwipeDir::Down ||
-      swipe == MappedInputManager::SwipeDir::Right) {
-    selected = (selected + count - 1) % count;
-    requestUpdate();
-    return;
+  
+  // INX theme: use side buttons for navigation
+  if (SETTINGS.uiTheme == CrossPointSettings::INX) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Down) || swipe == MappedInputManager::SwipeDir::Up ||
+        swipe == MappedInputManager::SwipeDir::Left) {
+      selected = (selected + 1) % count;
+      requestUpdate();
+      return;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Up) || swipe == MappedInputManager::SwipeDir::Down ||
+        swipe == MappedInputManager::SwipeDir::Right) {
+      selected = (selected + count - 1) % count;
+      requestUpdate();
+      return;
+    }
+  } else {
+    // Original navigation for other themes
+    if (mappedInput.wasReleased(MappedInputManager::Button::NavNext) || swipe == MappedInputManager::SwipeDir::Up ||
+        swipe == MappedInputManager::SwipeDir::Left) {
+      selected = (selected + 1) % count;
+      requestUpdate();
+      return;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::NavPrevious) || swipe == MappedInputManager::SwipeDir::Down ||
+        swipe == MappedInputManager::SwipeDir::Right) {
+      selected = (selected + count - 1) % count;
+      requestUpdate();
+      return;
+    }
   }
 }
 
@@ -557,6 +583,15 @@ void InxRecentActivity::render(RenderLock&&) {
   renderer.clearScreen();
   const auto& metrics = UITheme::getInstance().getMetrics();
   const int width = renderer.getScreenWidth();
+
+  // Draw top status bar with battery (only for INX theme)
+  if (SETTINGS.uiTheme == CrossPointSettings::INX) {
+    const InxTheme* inxTheme = dynamic_cast<const InxTheme*>(&UITheme::getInstance().getTheme());
+    if (inxTheme) {
+      inxTheme->drawTopStatusBar(renderer, Rect{0, 0, width, metrics.topPadding});
+    }
+  }
+
   drawPageHeader(Rect{0, metrics.topPadding, width, metrics.headerHeight}, tr(STR_MENU_RECENT_BOOKS));
   const Rect content = contentRect(renderer);
 
@@ -584,13 +619,6 @@ void InxRecentActivity::render(RenderLock&&) {
     }
   }
 
-  const auto labels = mainTabButtonLabels(SETTINGS.standbyShortcutEnabled ? tr(STR_STANDBY_TITLE) : "", tr(STR_OPEN),
-                                          books && books->size() > 1, false);
-  GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
-  GUI.drawBatteryRight(renderer,
-                       Rect{renderer.getScreenWidth() - kHomeBatteryRightMargin - kHomeBatteryWidth,
-                            renderer.getScreenHeight() - 30, kHomeBatteryWidth, kHomeBatteryHeight},
-                       SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS);
   if (prepareNextMissingCover()) return;
   renderer.displayBuffer();
 }
