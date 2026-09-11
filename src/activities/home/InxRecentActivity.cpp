@@ -100,9 +100,9 @@ void drawBookText(const GfxRenderer& renderer, const RecentBook& book, const int
 }
 }  // namespace
 
-void InxRecentActivity::selectMainTabContentEdge(const MainTabContentEdge edge) {
-  selected = MainTabs::contentEdgeIndex(edge, books ? static_cast<int>(books->size()) : 0);
-}
+//void InxRecentActivity::selectMainTabContentEdge(const MainTabContentEdge edge) {
+//  selected = MainTabs::contentEdgeIndex(edge, books ? static_cast<int>(books->size()) : 0);
+//}
 
 InxRecentLayout InxRecentActivity::layout() const {
   const auto value = static_cast<InxRecentLayout>(SETTINGS.inxRecentLayout);
