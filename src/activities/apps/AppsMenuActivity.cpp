@@ -319,7 +319,7 @@ void AppsMenuActivity::buildScreen(UiScreen& screen) {
 
 void AppsMenuActivity::drawChrome() {
   const auto& metrics = UITheme::getInstance().getMetrics();
-  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, width, metrics.headerHeight}, tr(STR_APPS_TITLE));
+  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, renderer.getScreenWidth(), metrics.headerHeight}, tr(STR_APPS_TITLE));
 }
 
 void AppsMenuActivity::drawFooter() {
