@@ -296,6 +296,37 @@ bool ActivityManager::handleMainTabInput() {
     return true;
   }
 
+  // INX theme: simplified - always content focus, map front buttons to tabs
+  if (SETTINGS.uiTheme == CrossPointSettings::INX) {
+    mainTabFocus = MainTabFocus::Content;
+    
+    // Map front buttons directly to tabs
+    if (mappedInput.wasReleased(MappedInputManager::Button::Back)) {
+      if (currentTab != MainTab::Recent)
+        goToMainTab(MainTab::Recent);
+      return true;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
+      if (currentTab != MainTab::Library)
+        goToMainTab(MainTab::Library);
+      return true;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+      if (currentTab != MainTab::Apps)
+        goToMainTab(MainTab::Apps);
+      return true;
+    }
+    if (mappedInput.wasReleased(MappedInputManager::Button::Right)) {
+      if (currentTab != MainTab::Settings)
+        goToMainTab(MainTab::Settings);
+      return true;
+    }
+    
+    // Let activities handle side buttons and power button for content navigation
+    return false;
+  }
+
+  // Original logic for other themes
   switch (mainTabFocus) {
     case MainTabFocus::Tabs:
       if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
@@ -413,9 +444,6 @@ void ActivityManager::goToMainTab(const MainTab tab) {
       return;
     case MainTab::Settings:
       goToSettings();
-      return;
-    case MainTab::Statistics:
-      goToReadingStats();
       return;
     case MainTab::Apps:
       goToApps();
