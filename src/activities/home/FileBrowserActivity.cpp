@@ -651,7 +651,7 @@ bool FileBrowserActivity::handleCustomInput() {
 }
 
 bool FileBrowserActivity::handleButtons() {
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Power)) {
     activateSelected();
     return true;
   }
@@ -807,7 +807,7 @@ void FileBrowserActivity::drawChrome() {
                                                                              : basepath.substr(basepath.rfind('/') + 1));
   // Header via GUI.drawHeader (already FreeInkUI-themed) for the battery
   // indicator; the rest of the screen renders through the app.
-  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, width, metrics.headerHeight}, folderName.c_str());
+  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, renderer.getScreenWidth(), metrics.headerHeight}, folderName.c_str());
 }
 
 void FileBrowserActivity::drawFooter() {

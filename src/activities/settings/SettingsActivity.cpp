@@ -491,7 +491,7 @@ void SettingsActivity::stepTab(const int direction) {
 
 bool SettingsActivity::handleButtons() {
   if (usesAccordion()) {
-    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Power)) {
       activateIndex(nav.selected);
       return true;
     }
@@ -510,7 +510,7 @@ bool SettingsActivity::handleButtons() {
     }
     return false;
   }
-  if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+  if (mappedInput.wasReleased(MappedInputManager::Button::Power)) {
     if (ringPos() == 0) {
       stepTab(1);
     } else {
@@ -1034,7 +1034,7 @@ void SettingsActivity::render(RenderLock&&) {
   // indicator; the rest of the screen renders through the app.
   // Version rides in the header's trailing label slot: the footer position
   // conflicts with button hints on non-touch devices.
-  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, width, metrics.headerHeight}, tr(STR_SETTINGS_TITLE),
+  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, renderer.getScreenWidth(), metrics.headerHeight}, tr(STR_SETTINGS_TITLE),
                  CROSSPOINT_VERSION);
 
   renderUi();
