@@ -100,9 +100,9 @@ void drawBookText(const GfxRenderer& renderer, const RecentBook& book, const int
 }
 }  // namespace
 
-//void InxRecentActivity::selectMainTabContentEdge(const MainTabContentEdge edge) {
-//  selected = MainTabs::contentEdgeIndex(edge, books ? static_cast<int>(books->size()) : 0);
-//}
+void InxRecentActivity::selectMainTabContentEdge(const MainTabContentEdge edge) {
+  selected = MainTabs::contentEdgeIndex(edge, books ? static_cast<int>(books->size()) : 0);
+}
 
 InxRecentLayout InxRecentActivity::layout() const {
   const auto value = static_cast<InxRecentLayout>(SETTINGS.inxRecentLayout);
@@ -586,7 +586,7 @@ void InxRecentActivity::render(RenderLock&&) {
 
   // Draw top status bar with battery (only for INX theme)
   if (SETTINGS.uiTheme == CrossPointSettings::INX) {
-    const InxTheme* inxTheme = dynamic_cast<const InxTheme*>(&UITheme::getInstance().getTheme());
+    const InxTheme* inxTheme = static_cast<const InxTheme*>(&UITheme::getInstance().getTheme());
     if (inxTheme) {
       inxTheme->drawTopStatusBar(renderer, Rect{0, 0, width, metrics.topPadding});
     }
