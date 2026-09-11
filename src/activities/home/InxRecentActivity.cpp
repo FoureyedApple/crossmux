@@ -29,7 +29,7 @@ constexpr int kHomeBatteryRightMargin = 12;
 
 Rect contentRect(const GfxRenderer& renderer) {
   const auto& metrics = UITheme::getInstance().getMetrics();
-  const int top = metrics.topPadding + metrics.headerHeight + metrics.verticalSpacing;
+  const int top = metrics.topPadding + metrics.verticalSpacing;
   return Rect{0, top, renderer.getScreenWidth(),
               InxRecentGeometry::contentHeight(renderer.getScreenHeight(), top, metrics.buttonHintsHeight)};
 }
@@ -379,7 +379,7 @@ void InxRecentActivity::loop() {
       return;
     }
   } else {
-    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Power)) {
       openSelected();
       return;
     }
@@ -592,7 +592,7 @@ void InxRecentActivity::render(RenderLock&&) {
     }
   }
 
-  drawPageHeader(Rect{0, metrics.topPadding, width, metrics.headerHeight}, tr(STR_MENU_RECENT_BOOKS));
+  drawPageHeader(Rect{0, renderer.getScreenHeight() - metrics.headerHeight, width, metrics.headerHeight}, tr(STR_MENU_RECENT_BOOKS));
   const Rect content = contentRect(renderer);
 
   if (!books || books->empty()) {

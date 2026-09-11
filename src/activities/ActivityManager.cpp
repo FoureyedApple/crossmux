@@ -306,12 +306,12 @@ bool ActivityManager::handleMainTabInput() {
         goToMainTab(MainTab::Recent);
       return true;
     }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
       if (currentTab != MainTab::Library)
         goToMainTab(MainTab::Library);
       return true;
     }
-    if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
+    if (mappedInput.wasReleased(MappedInputManager::Button::Left)) {
       if (currentTab != MainTab::Apps)
         goToMainTab(MainTab::Apps);
       return true;
