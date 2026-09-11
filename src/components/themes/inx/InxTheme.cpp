@@ -53,8 +53,6 @@ const uint8_t* iconForTab(const MainTab tab) {
       return InxLibraryTabIcon;
     case MainTab::Settings:
       return InxSettingsTabIcon;
-    case MainTab::Statistics:
-      return InxStatisticsTabIcon;
     case MainTab::Apps:
       return InxAppsTabIcon;
     case MainTab::None:
@@ -78,17 +76,24 @@ void drawDottedSeparator(const GfxRenderer& renderer, const int x, const int y, 
 }
 }  // namespace
 
-void InxTheme::drawHeader(const GfxRenderer& renderer, const Rect rect, const char* title, const char* subtitle) const {
+void InxTheme::drawTopStatusBar(const GfxRenderer& renderer, Rect rect) const {
   renderer.fillRect(rect.x, rect.y, rect.width, rect.height, false);
 
   const bool showBatteryPercentage =
       SETTINGS.hideBatteryPercentage != CrossPointSettings::HIDE_BATTERY_PERCENTAGE::HIDE_ALWAYS;
   const int batteryX = rect.x + rect.width - 12 - InxMetrics::values.batteryWidth;
   drawBatteryRight(renderer,
-                   Rect{batteryX, rect.y + 5, InxMetrics::values.batteryWidth, InxMetrics::values.batteryHeight},
+                   Rect{batteryX, rect.y + (rect.height - InxMetrics::values.batteryHeight) / 2,
+                        InxMetrics::values.batteryWidth, InxMetrics::values.batteryHeight},
                    showBatteryPercentage);
 
-  const int titleTop = rect.y + InxMetrics::values.batteryBarHeight;
+  renderer.drawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width - 1, rect.y + rect.height - 1, true);
+}
+
+void InxTheme::drawHeader(const GfxRenderer& renderer, const Rect rect, const char* title, const char* subtitle) const {
+  renderer.fillRect(rect.x, rect.y, rect.width, rect.height, false);
+
+  const int titleTop = rect.y + 8;
   const int rightPadding = InxMetrics::values.contentSidePadding;
   int titleRight = rect.x + rect.width - rightPadding;
   if (subtitle && *subtitle) {

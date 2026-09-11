@@ -5,7 +5,7 @@
 namespace InxMetrics {
 constexpr ThemeMetrics makeValues() {
   ThemeMetrics metrics = LyraMetrics::values;
-  metrics.topPadding = 0;
+  metrics.topPadding = 24;  // Space for top status bar (battery)
   metrics.batteryBarHeight = 24;
   metrics.headerHeight = 66;
   metrics.verticalSpacing = 0;
@@ -27,6 +27,8 @@ constexpr ThemeMetrics makeValues() {
   metrics.menuSpacing = 0;
   metrics.scrollBarWidth = 6;
   metrics.scrollBarRightOffset = 2;
+  metrics.buttonHintsHeight = 0;  // Disable button hints
+  metrics.tabBarHeight = 60;  // Slightly taller for 4 tabs
   return metrics;
 }
 inline constexpr ThemeMetrics values = makeValues();
@@ -34,6 +36,7 @@ inline constexpr ThemeMetrics values = makeValues();
 
 class InxTheme final : public LyraTheme {
  public:
+  void drawTopStatusBar(const GfxRenderer& renderer, Rect rect) const;
   void drawHeader(const GfxRenderer& renderer, Rect rect, const char* title,
                   const char* subtitle = nullptr) const override;
   void drawSubHeader(const GfxRenderer& renderer, Rect rect, const char* label,
