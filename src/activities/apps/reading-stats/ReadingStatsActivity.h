@@ -30,6 +30,6 @@ class ReadingStatsActivity final : public Activity {
   void onExit() override;
   void loop() override;
   void render(RenderLock&&) override;
-  MainTab mainTab() const override { return mainTabEnabled ? MainTab::Statistics : MainTab::None; }
+  MainTab mainTab() const override { return MainTab::None; }
   void selectMainTabContentEdge(MainTabContentEdge edge) override;
 };
